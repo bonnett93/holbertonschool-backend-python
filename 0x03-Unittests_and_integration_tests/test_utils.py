@@ -4,7 +4,7 @@
 from unittest import TestCase, mock
 from utils import access_nested_map, get_json
 from parameterized import parameterized
-from typing import Mapping, Sequence, Any
+from typing import Dict, Mapping, Sequence, Any
 
 
 class TestAccessNestedMap(TestCase):
@@ -26,7 +26,8 @@ class TestAccessNestedMap(TestCase):
     ])
     def test_access_nested_map_exception(self, nested_map: Mapping,
                                          path: Sequence) -> None:
-        """Test if function raises a KeyError"""
+        """Test if function raises a KeyError
+        """
         with self.assertRaises(KeyError):
             access_nested_map(nested_map, path)
 
@@ -34,24 +35,13 @@ class TestAccessNestedMap(TestCase):
 class TestGetJson(TestCase):
     """Test cases for get_json function"""
 
-    def test_get_json(self) -> None:
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
+    ])
+    def test_get_json(self, test_url: str, test_payload: Dict) -> None:
         """Test that utils.get_json returns the expected result"""
         with mock.patch('utils.requests.get') as mock_request:
-            test_url = "http://example.com"
-            test_payload = {"payload": True}
-
-            my_mock_response = mock.Mock(status_code=200)
-            my_mock_response.json.return_value = test_payload
-            mock_request.return_value = my_mock_response
-
-            func_response = get_json(test_url)
-            mock_request.assert_called_once_with(test_url)
-            self.assertEqual(func_response, test_payload)
-
-        with mock.patch('utils.requests.get') as mock_request:
-            test_url = "http://holberton.io"
-            test_payload = {"payload": False}
-
             my_mock_response = mock.Mock(status_code=200)
             my_mock_response.json.return_value = test_payload
             mock_request.return_value = my_mock_response
