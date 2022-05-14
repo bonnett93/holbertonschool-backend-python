@@ -34,7 +34,7 @@ class TestAccessNestedMap(TestCase):
 class TestGetJson(TestCase):
     """Test cases for get_json function"""
 
-    def test_get_json(self):
+    def test_get_json(self) -> Any:
         """Test that utils.get_json returns the expected result"""
         with mock.patch('utils.requests.get') as mock_request:
             test_url = "http://example.com"
